@@ -10,8 +10,4 @@ class Chat extends Model
     protected $table = 'chats';
 
     protected $guarded = false;
-
-    protected $fillable = [
-        'user_id',
-    ];
 }

@@ -11,11 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('chats', function (Blueprint $table) {
+        Schema::create('folders', function (Blueprint $table) {
             $table->id();
-            $table->string('title')->default('Новый чат');
             $table->foreignId('user_id')->nullable()->index()->constrained('users');
-            $table->foreignId('folder_id')->nullable()->index()->constrained('folders');
+            $table->string('title')->default('Новая папка');
             $table->timestamps();
         });
     }
@@ -25,6 +24,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('chats');
+        Schema::dropIfExists('folders');
     }
 };

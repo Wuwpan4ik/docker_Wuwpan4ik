@@ -18,6 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth')->group(function() {
     Route::get('/', [\App\Http\Controllers\Chat\ChatController::class, 'index']);
     Route::resource('chats', \App\Http\Controllers\Chat\ChatController::class);
+    Route::post('/chats.folder_store', [\App\Http\Controllers\Chat\ChatController::class, 'storeInFolder'])->name('chats.folder_store');
+    Route::post('/folder', [\App\Http\Controllers\Folder\FolderController::class, 'store'])->name('folder.store');
 });
 Route::post('/sendMessage', [\App\Http\Controllers\OpenAi\OpenAiController::class, 'send__message'])->name('sendMessage');
 Route::get('/event-stream', [\App\Http\Controllers\OpenAi\OpenAiController::class, 'event__stream']);

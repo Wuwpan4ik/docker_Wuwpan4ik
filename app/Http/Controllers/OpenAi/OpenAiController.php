@@ -24,10 +24,10 @@ class OpenAiController extends Controller
     public function event__stream()
     {
         $results = Message::where('chat_id', 1)->orderByDesc('id')->take(2)->get()->sortBy("id");
-
         if (empty($results)) {
             $history[] = array("role" => "system", "content" => "You are a helpful assistant.");
         }
+
         foreach ($results as $result) {
             if ($result->is_bot) $history[] = ["role" => 'assistant', "content" => $result->message];
             if (!$result->is_bot) $history[] = ["role" => 'user', "content" => $result->message];
@@ -35,23 +35,22 @@ class OpenAiController extends Controller
 
         $opts = [
             'model' => 'gpt-3.5-turbo',
-            'temperature' => 1.0,
             'messages' => $history,
-            'max_tokens' => 500,
+            'temperature' => 1.0,
+            'max_tokens' => 3000,
             'frequency_penalty' => 0,
             'presence_penalty' => 0
         ];
-
-        $open_ai_key = "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";
-        $open_ai = new OpenAi($open_ai_key);
+        $open_ai = new OpenAi(env('open_ai_key'));
         $chat = $open_ai->chat($opts);
-        Debugbar::log($chat);
         $d = json_decode($chat);
+        Debugbar::log($chat);
         $message = new Message;
         $message->message = $d->choices[0]->message->content;
         $message->chat_id = 1;
         $message->is_bot = true;
         $message->save();
-        echo $d->choices[0]->message->content;
+        Debugbar::log($d);
+        return $d->choices[0]->message->content;
     }
 }

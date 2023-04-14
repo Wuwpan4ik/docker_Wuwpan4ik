@@ -67,7 +67,7 @@ body.dark .addChatIcon {
 body.dark button.buttonTool {
   background: rgba(255, 255, 255, 0.1);
 }
-body.dark .menu-items a {
+body.dark .menu-items a, form {
   color: #525459;
 }
 body.dark .welcome-chat h2 {
@@ -148,7 +148,7 @@ body.dark h2 {
   padding-top: 4px;
   border-top: 1px solid #2A2F39;
 }
-.menu-items a {
+.menu-items a,form {
   padding: 15px 20px;
   display: flex;
   border-radius: 10px;
@@ -156,7 +156,20 @@ body.dark h2 {
   align-items: center;
   margin-top: 10px;
 }
-.menu-items a:hover {
+
+.menu-items form button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background-color: transparent;
+    color: #525459;
+    border: none;
+}
+.menu-items a, form {
+    background: transparent;
+}
+.menu-items a,form:hover {
   background: #1D2129;
 }
 

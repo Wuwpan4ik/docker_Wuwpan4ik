@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Chat;
 
 use App\Http\Controllers\Controller;
 use App\Models\Chat;
+use App\Models\Folder;
 use App\Models\Message;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -15,8 +16,10 @@ class ChatController extends Controller
      */
     public function index()
     {
-        $chats = Chat::where('user_id', Auth::id())->get();
-        return view("Chats.index", compact('chats'));
+        $chats = Chat::whereNull('folder_id')->where('user_id', Auth::id())->get();
+        $folders = Folder::with('children')->get();
+        $messages = Message::where('chat_id', 1)->orderByDesc('id')->take(2)->get()->sortBy("id");
+        return view('Chats.index', compact('chats', 'messages', 'folders'));
     }
 
     /**
@@ -39,14 +42,25 @@ class ChatController extends Controller
         return redirect('/');
     }
 
+    public function storeInFolder(Request $request)
+    {
+        Chat::create([
+            'user_id' => Auth::id(),
+            'folder_id' => $request->folder_id
+        ]);
+
+        return redirect('/');
+    }
+
     /**
      * Display the specified resource.
      */
     public function show(Chat $chat)
     {
-        $chats = Chat::where('user_id', Auth::id())->get();
-        $messages = Message::where('chat_id', 1)->orderByDesc('id')->take(5)->get()->sortBy("id");
-        return view('Chats.show', compact('chat', 'chats', 'messages'));
+        $chats = Chat::whereNull('folder_id')->where('user_id', Auth::id())->get();
+        $folders = Folder::with('children')->get();
+        $messages = Message::where('chat_id', 1)->orderByDesc('id')->take(2)->get()->sortBy("id");
+        return view('Chats.show', compact('chat', 'chats', 'messages', 'folders'));
     }
 
     /**
