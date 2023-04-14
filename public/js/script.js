@@ -63,15 +63,15 @@ function sendMsg(msg) {
         .then(response => response.json())
         .then(data => {
             let uuid = uuidv4()
-            fetch("/event-stream", {headers: {'Content-Type': 'charset=utf-8'}})
+            fetch("/event-stream")
                 .then(response => response.text())
                 .then(response => {
                     msgerSendBtn.disabled = false;
+                    console.log(response)
                     appendMessage(BOT_NAME, PERSON_IMG, "left", response, uuid);
                 })
         })
         .catch(error => console.error(error));
-
 }
 
 // Utils

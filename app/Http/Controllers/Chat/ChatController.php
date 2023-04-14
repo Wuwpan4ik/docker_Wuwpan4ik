@@ -45,7 +45,8 @@ class ChatController extends Controller
     public function show(Chat $chat)
     {
         $chats = Chat::where('user_id', Auth::id())->get();
-        return view('Chats.show', compact('chat', 'chats'));
+        $messages = Message::where('chat_id', 1)->orderByDesc('id')->take(5)->get()->sortBy("id");
+        return view('Chats.show', compact('chat', 'chats', 'messages'));
     }
 
     /**
@@ -67,8 +68,10 @@ class ChatController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Chat $chat)
     {
-        //
+        $chat->delete();
+
+        return redirect()->route('chats.index');
     }
 }
